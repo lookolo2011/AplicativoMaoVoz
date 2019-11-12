@@ -112,8 +112,9 @@ class _VoiceHomeState extends State<VoiceHome> {
                         onPressed: () {
                           if (_isAvailable && !_isListening) {
                             _speechRecognition.listen(locale: "pt_BR").then((result) => print('$result')).asStream();
+                            _speechRecognition.listen(locale: "pt_BR").then((result) => _enviarComando('$result')).asStream();
                           }
-                          _enviarComando(resultText);
+                          //_enviarComando(resultText);
                         },
                         ),
                         FloatingActionButton(
@@ -325,8 +326,8 @@ class _ChatPage extends State<ChatPage> {
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorColor: Colors.red,
           tabs: <Widget>[
-            new Tab(text: "Voz"),
             new Tab(text: "Comandos"),
+            new Tab(text: "Voz"),
           ],
         ),
       ),
