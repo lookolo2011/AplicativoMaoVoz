@@ -22,15 +22,18 @@ class _Message {
 }
 
 class VoiceHome extends StatefulWidget {
+  final BluetoothDevice server;
+  BluetoothConnection connection;
+
+  VoiceHome(this.connection, {this.server});
+  
   @override
-  _VoiceHomeState createState() => _VoiceHomeState();
+  _VoiceHomeState createState() => new _VoiceHomeState(BluetoothConnection);
 }
 
 class _VoiceHomeState extends State<VoiceHome> {
-  //asassasasdsadsadasdfasdfsdgadfhsdghsdghstrjtrhjrjy
   static final clientID = 0;
-  static final maxMessageLength = 10;
-  BluetoothConnection connection;
+  static final maxMessageLength = 4096 - 3;
 
   List<_Message> messages = List<_Message>();
   String _messageBuffer = '';
@@ -39,7 +42,9 @@ class _VoiceHomeState extends State<VoiceHome> {
   final ScrollController listScrollController = new ScrollController();
 
   bool isConnecting = true;
-  bool get isConnected => connection != null && connection.isConnected;
+
+  _VoiceHomeState(Type bluetoothConnection);
+  bool get isConnected => widget.connection != null && widget.connection.isConnected;
 
   bool isDisconnecting = false;
 
@@ -49,13 +54,17 @@ class _VoiceHomeState extends State<VoiceHome> {
   bool _isListening = false;
   bool ligaVoz = false;
 
-  String resultText = "";
+  String resultText = "A";
 
   @override
-  void initState() {
-    super.initState();
-    initSpeechRecognizer();
-  }
+    initState() {
+      
+      super.initState();
+      initSpeechRecognizer();
+
+      //bluetooth();
+    }
+
 
   void initSpeechRecognizer() {
     _speechRecognition = SpeechRecognition();
@@ -79,6 +88,17 @@ class _VoiceHomeState extends State<VoiceHome> {
     _speechRecognition.activate().then(
           (result) => setState(() => _isAvailable = result),
         );
+  }
+
+  void dispose() {
+    // Avoid memory leak (`setState` after dispose) and disconnect
+    if (isConnected) {
+      isDisconnecting = true;
+      widget.connection.dispose();
+      widget.connection = null;
+    }
+
+    super.dispose();
   }
 
   @override
@@ -109,12 +129,12 @@ class _VoiceHomeState extends State<VoiceHome> {
                         ),
                         FloatingActionButton(
                           child: Icon(Icons.mic),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_isAvailable && !_isListening) {
-                            _speechRecognition.listen(locale: "pt_BR").then((result) => print('$result')).asStream();
-                            _speechRecognition.listen(locale: "pt_BR").then((result) => _enviarComando('$result')).asStream();
+                           // _speechRecognition.listen(locale: "pt_BR").then((result) => print('$result')).asStream();
+                            _speechRecognition.listen(locale: "pt_BR").then((result) => {if(result == false) (_enviarComando(resultText))} );
                           }
-                          //_enviarComando(resultText);
+
                         },
                         ),
                         FloatingActionButton(
@@ -152,65 +172,44 @@ class _VoiceHomeState extends State<VoiceHome> {
             ),
         );
   }
-    void _onDataReceived(Uint8List data) {
-    // Allocate buffer for parsed data
-    int backspacesCounter = 0;
-    data.forEach((byte) {
-      if (byte == 8 || byte == 127) {
-        backspacesCounter++;
-      }
-    });
-    Uint8List buffer = Uint8List(data.length - backspacesCounter);
-    int bufferIndex = buffer.length;
 
-    // Apply backspace control character
-    backspacesCounter = 0;
-    for (int i = data.length - 1; i >= 0; i--) {
-      if (data[i] == 8 || data[i] == 127) {
-        backspacesCounter++;
-      }
-      else {
-        if (backspacesCounter > 0) {
-          backspacesCounter--;
-        }
-        else {
-          buffer[--bufferIndex] = data[i];
-        }
-      }
+// enviaaaa voz
+
+  String _converteVoz(String comandoVoz) {
+
+    if(comandoVoz == "abrir mão") {
+      return "A";
+    }
+    else if(comandoVoz == "fechar mão") {
+      return "B";
+    }
+    else if(comandoVoz == "rock") {
+      return "C";
+    }
+    else if(comandoVoz == "suave") {
+      return "D";
+    }
+    else if(comandoVoz == "tranquilo") {
+      return "E";
+    }
+    else if(comandoVoz == "homem-aranha") {
+      return "F";
     }
 
-    // Create message if there is new line character
-    String dataString = String.fromCharCodes(buffer);
-    int index = buffer.indexOf(13);
-    if (~index != 0) { // \r\n
-      setState(() {
-        messages.add(_Message(1, 
-          backspacesCounter > 0 
-            ? _messageBuffer.substring(0, _messageBuffer.length - backspacesCounter) 
-            : _messageBuffer
-          + dataString.substring(0, index)
-        ));
-        _messageBuffer = dataString.substring(index);
-      });
-    }
-    else {
-      _messageBuffer = (
-        backspacesCounter > 0 
-          ? _messageBuffer.substring(0, _messageBuffer.length - backspacesCounter) 
-          : _messageBuffer
-        + dataString
-      );
-    }
+    //se não for nenhum comando
+    else return "";
   }
 
   void _enviarComando(String text) async {
+    text = _converteVoz(text);
     text = text.trim();
     textEditingController.clear();
-
+    
+    print('lukinha:$text');
     if (text.length > 0)  {
       try {
-        connection.output.add(utf8.encode(text + "\r\n"));
-        await connection.output.allSent;
+        widget.connection.output.add(utf8.encode(text + "\r\n"));
+        await widget.connection.output.allSent;
 
         setState(() {
           messages.add(_Message(clientID, text));
@@ -244,7 +243,6 @@ class _ChatPage extends State<ChatPage> {
 
   bool isDisconnecting = false;
 
-  //VOZ
 
   @override
   void initState() {
@@ -259,12 +257,6 @@ class _ChatPage extends State<ChatPage> {
       });
 
       connection.input.listen(_onDataReceived).onDone(() {
-        // Example: Detect which side closed the connection
-        // There should be `isDisconnecting` flag to show are we are (locally)
-        // in middle of disconnecting process, should be set before calling
-        // `dispose`, `finish` or `close`, which all causes to disconnect.
-        // If we except the disconnection, `onDone` should be fired as result.
-        // If we didn't except this (no flag set), it means closing by remote.
         if (isDisconnecting) {
           print('Disconnecting locally!');
         }
@@ -295,23 +287,7 @@ class _ChatPage extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Row> list = messages.map((_message) {
-      return Row(
-        children: <Widget>[
-          Container(
-            child: Text((text) {
-              return text == '/shrug' ? '¯\\_(ツ)_/¯' : text;
-            } (_message.text.trim()), style: TextStyle(color: Colors.white)),
-            padding: EdgeInsets.all(12.0),
-            margin: EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
-            width: 222.0,
-            decoration: BoxDecoration(color: _message.whom == clientID ? Colors.blueAccent : Colors.grey, borderRadius: BorderRadius.circular(7.0)),
-          ),
-        ],
-        mainAxisAlignment: _message.whom == clientID ? MainAxisAlignment.end : MainAxisAlignment.start,
-      );
-    }).toList();
-    
+        
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -326,15 +302,15 @@ class _ChatPage extends State<ChatPage> {
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorColor: Colors.red,
           tabs: <Widget>[
-            new Tab(text: "Comandos"),
             new Tab(text: "Voz"),
+            new Tab(text: "Comandos"),
           ],
         ),
       ),
       body: new TabBarView(
       children: [
       //1 Tab = Comandos
-      Container(
+      SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -482,12 +458,54 @@ class _ChatPage extends State<ChatPage> {
                     ), //Text
                     onPressed: isConnected ? () => _sendMessage("F") : null
                 ),
+                RaisedButton(
+                  child: Text(
+                      "Suave",
+                      style: TextStyle(color: Colors.black, fontSize: 30),
+                    ), //Text
+                    onPressed: isConnected ? () => _sendMessage("D") : null
+                ),
+                RaisedButton(
+                  child: Text(
+                      "Tranquilo",
+                      style: TextStyle(color: Colors.black, fontSize: 30),
+                    ), //Text
+                    onPressed: isConnected ? () => _sendMessage("E") : null
+                ),
+                RaisedButton(
+                  child: Text(
+                      "Vai Teia",
+                      style: TextStyle(color: Colors.black, fontSize: 30),
+                    ), //Text
+                    onPressed: isConnected ? () => _sendMessage("F") : null
+                ),
+                RaisedButton(
+                  child: Text(
+                      "Suave",
+                      style: TextStyle(color: Colors.black, fontSize: 30),
+                    ), //Text
+                    onPressed: isConnected ? () => _sendMessage("D") : null
+                ),
+                RaisedButton(
+                  child: Text(
+                      "Tranquilo",
+                      style: TextStyle(color: Colors.black, fontSize: 30),
+                    ), //Text
+                    onPressed: isConnected ? () => _sendMessage("E") : null
+                ),
+                RaisedButton(
+                  child: Text(
+                      "Vai Teia",
+                      style: TextStyle(color: Colors.black, fontSize: 30),
+                    ), //Text
+                    onPressed: isConnected ? () => _sendMessage("F") : null
+                ),
               ],
             )//
           ],
         )
       ),
-      VoiceHome(),
+      VoiceHome(connection),
       ]
       )
     )
