@@ -130,9 +130,8 @@ class _VoiceHomeState extends State<VoiceHome> {
                         FloatingActionButton(
                           child: Icon(Icons.mic),
                         onPressed: () async {
-                          if (_isAvailable && !_isListening) {
-                           // _speechRecognition.listen(locale: "pt_BR").then((result) => print('$result')).asStream();
-                            _speechRecognition.listen(locale: "pt_BR").then((result) => {if(result == false) (_enviarComando(resultText))} );
+                          if (_isAvailable && !_isListening) { _speechRecognition.listen(locale: "pt_BR").then((result) => {if(result == false) (_enviarComando(resultText))} );
+
                           }
                           _enviarComando(resultText);
                         },
