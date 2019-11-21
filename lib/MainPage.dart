@@ -79,9 +79,12 @@ class _MainPage extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mão Voice'),
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        title: const Text('Halp'),
       ),
       body: Container(
+        decoration: backgroundGradient(),
         child: ListView(
           children: <Widget>[
             Divider(),
@@ -155,7 +158,8 @@ class _MainPage extends State<MainPage> {
             ),
             ListTile(
               title: RaisedButton(
-                child: const Text('Conectar a Mão'),
+                child: const Text('Conectar a Mão',style: TextStyle(fontSize: 20.0,color: Colors.white ),),
+                color: Colors.red[800],
                 onPressed: () async {
                   final BluetoothDevice selectedDevice = await Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) { return SelectBondedDevicePage(checkAvailability: false); })
@@ -174,6 +178,22 @@ class _MainPage extends State<MainPage> {
           ],
         ),
       ),
+    );
+  }
+
+  BoxDecoration backgroundGradient(){
+    return BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        tileMode: TileMode.mirror,
+        colors: [
+          Colors.blueGrey[300],
+          Colors.blueGrey[200],
+          Colors.blueGrey[200],
+          Colors.blueGrey[300]
+        ]
+      )
     );
   }
 

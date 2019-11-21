@@ -54,7 +54,7 @@ class _VoiceHomeState extends State<VoiceHome> {
   bool _isListening = false;
   bool ligaVoz = false;
 
-  String resultText = "A";
+  String resultText = "HALP";
 
   @override
     initState() {
@@ -204,7 +204,7 @@ class _VoiceHomeState extends State<VoiceHome> {
     text = text.trim();
     textEditingController.clear();
     
-    print('lukinha:$text');
+    print('halp:$text');
     if (text.length > 0)  {
       try {
         widget.connection.output.add(utf8.encode(text + "\r\n"));
@@ -219,7 +219,6 @@ class _VoiceHomeState extends State<VoiceHome> {
         });
       }
       catch (e) {
-        // Ignore error, but notify state
         setState(() {});
       }
     }
@@ -291,6 +290,7 @@ class _ChatPage extends State<ChatPage> {
       length: 2,
       child: Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: (
           isConnecting ? Text('Conectando em ' + widget.server.name + '...') :
           isConnected ? Text('Conectado a ' + widget.server.name) :
@@ -301,8 +301,8 @@ class _ChatPage extends State<ChatPage> {
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorColor: Colors.red,
           tabs: <Widget>[
-            new Tab(text: "Voz"),
-            new Tab(text: "Comandos"),
+            new Tab(icon: Icon(Icons.add_to_home_screen),text: "Comandos"),
+            new Tab(icon: Icon(Icons.keyboard_voice),text: "Voz"),
           ],
         ),
       ),
@@ -332,6 +332,7 @@ class _ChatPage extends State<ChatPage> {
                       "Dedo 2",
                       style: TextStyle(color: Colors.black, fontSize: 18),
                     ), //Text
+                    color: Colors.red,
                     onPressed: isConnected ? () => _sendMessage("b") : null
                 ),
                 RaisedButton(
@@ -420,6 +421,7 @@ class _ChatPage extends State<ChatPage> {
                       "Abre",
                       style: TextStyle(color: Colors.black, fontSize: 30),
                     ), //Text
+                    color: Colors.red,
                     onPressed: isConnected ? () => _sendMessage("A") : null
                 ),
                 RaisedButton(
@@ -512,7 +514,7 @@ class _ChatPage extends State<ChatPage> {
   }
 
   void _onDataReceived(Uint8List data) {
-    // Allocate buffer for parsed data
+    // Alocar o buffer para os dados analisados
     int backspacesCounter = 0;
     data.forEach((byte) {
       if (byte == 8 || byte == 127) {
@@ -522,7 +524,7 @@ class _ChatPage extends State<ChatPage> {
     Uint8List buffer = Uint8List(data.length - backspacesCounter);
     int bufferIndex = buffer.length;
 
-    // Apply backspace control character
+    // Aplicar caractere de controle de backspace
     backspacesCounter = 0;
     for (int i = data.length - 1; i >= 0; i--) {
       if (data[i] == 8 || data[i] == 127) {
@@ -538,7 +540,7 @@ class _ChatPage extends State<ChatPage> {
       }
     }
 
-    // Create message if there is new line character
+    // Criar mensagem se houver um novo caractere de linha
     String dataString = String.fromCharCodes(buffer);
     int index = buffer.indexOf(13);
     if (~index != 0) { // \r\n
@@ -586,4 +588,3 @@ class _ChatPage extends State<ChatPage> {
     }
   }
 }
-
