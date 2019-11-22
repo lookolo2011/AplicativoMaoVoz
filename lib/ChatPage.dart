@@ -105,69 +105,87 @@ class _VoiceHomeState extends State<VoiceHome> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: new Scaffold(
-                body: Column(
-                  //Botões e saida de voz para baixo com o ".end"
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        FloatingActionButton(
-                          child: Icon(Icons.cancel),
-                          mini: true,
-                          backgroundColor: Colors.deepOrange,
-                          onPressed: () {
-                            if (_isListening)
-                              _speechRecognition.cancel().then(
-                                    (result) => setState(() {
-                                          _isListening = result;
-                                          resultText = "";
-                                        }),
-                                  );
-                          },
-                        ),
-                        FloatingActionButton(
-                          child: Icon(Icons.mic),
-                        onPressed: () async {
-                          if (_isAvailable && !_isListening) { _speechRecognition.listen(locale: "pt_BR").then((result) => {if(result == false) (_enviarComando(resultText))} );
-
-                          }
-                          _enviarComando(resultText);
-                        },
-                        ),
-                        FloatingActionButton(
-                          child: Icon(Icons.stop),
-                          mini: true,
-                          backgroundColor: Colors.deepPurple,
-                          onPressed: () {
-                            if (_isListening)
-                              _speechRecognition.stop().then(
-                                    (result) => setState(() => _isListening = result),
-                                  );
-                          },
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      decoration: BoxDecoration(
-                        color: Colors.cyanAccent[100],
-                        borderRadius: BorderRadius.circular(6.0),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 12.0,
-                      ),
-                      child: Text(
-                        resultText,
-                        //Limite para pegar apenas 1 linha do que é falado
-                        maxLines: 1,
-                        style: TextStyle(fontSize: 24.0),
-                      ),
-                    )
-                  ],
+                backgroundColor: Colors.blueGrey[200],
+                body: Container( 
+                  decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    tileMode: TileMode.mirror,
+                    colors: [
+                      Colors.blueGrey[300],
+                      Colors.blueGrey[200],
+                      Colors.blueGrey[200],
+                      Colors.blueGrey[300]
+                    ]
+                  )
                 ),
+                  child:
+                  Column(
+                    //Botões e saida de voz para baixo com o ".end"
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          FloatingActionButton(
+                            child: Icon(Icons.cancel),
+                            mini: true,
+                            backgroundColor: Colors.deepOrange,
+                            onPressed: () {
+                              if (_isListening)
+                                _speechRecognition.cancel().then(
+                                      (result) => setState(() {
+                                            _isListening = result;
+                                            resultText = "";
+                                          }),
+                                    );
+                            },
+                          ),
+                          FloatingActionButton(
+                            child: Icon(Icons.mic),
+                          onPressed: () async {
+                            if (_isAvailable && !_isListening) { _speechRecognition.listen(locale: "pt_BR").then((result) => {if(result == false) (_enviarComando(resultText))} );
+
+                            }
+                            _enviarComando(resultText);
+                          },
+                          ),
+                          FloatingActionButton(
+                            child: Icon(Icons.stop),
+                            mini: true,
+                            backgroundColor: Colors.deepPurple,
+                            onPressed: () {
+                              if (_isListening)
+                                _speechRecognition.stop().then(
+                                      (result) => setState(() => _isListening = result),
+                                    );
+                            },
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 12.0,
+                        ),
+                        child: Text(
+                          resultText,
+                          //Limite para pegar apenas 1 linha do que é falado
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 24.0),
+                        ),
+                      )
+                    ],
+                  ),//
+                )
             ),
         );
   }
@@ -306,204 +324,239 @@ class _ChatPage extends State<ChatPage> {
           ],
         ),
       ),
+      backgroundColor: Colors.blueGrey[200],
       body: new TabBarView(
       children: [
       //1 Tab = Comandos
       SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
+        child: 
+        Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              tileMode: TileMode.mirror,
+              colors: [
+                Colors.blueGrey[300],
+                Colors.blueGrey[200],
+                Colors.blueGrey[200],
+                Colors.blueGrey[300]
+              ]
+            )
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
 
-            //abre
-            Text("Abre os Dedos"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text(
-                      "Dedo 1",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("a") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Dedo 2",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    color: Colors.red,
-                    onPressed: isConnected ? () => _sendMessage("b") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Dedo 3",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("c") : null
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text(
-                      "Dedo 4",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("d") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Dedo 5",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("e") : null
-                ),
-              ],
-            ),
+              //abre
+              Text("Abre os Dedos"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    color: Colors.redAccent,
+                    child: Text(
+                        "Dedo 1",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("a") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 2",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      color: Colors.red,
+                      onPressed: isConnected ? () => _sendMessage("b") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 3",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("c") : null
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 4",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("d") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 5",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("e") : null
+                  ),
+                ],
+              ),
 
-            //fecha
-            Text("Fecha os Dedos"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text(
-                      "Dedo 1",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("g") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Dedo 2",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("h") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Dedo 3",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("i") : null
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text(
-                      "Dedo 4",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("j") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Dedo 5",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("k") : null
-                ),
-              ],
-            ),
+              //fecha
+              Text("Fecha os Dedos"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 1",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("g") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 2",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("h") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 3",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("i") : null
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 4",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("j") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Dedo 5",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("k") : null
+                  ),
+                ],
+              ),
 
-            Text("Comandos prontos"),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                RaisedButton(
-                  child: Text(
-                      "Abre",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    color: Colors.red,
-                    onPressed: isConnected ? () => _sendMessage("A") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Fecha",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("B") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Rock",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("C") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Suave",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("D") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Tranquilo",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("E") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Vai Teia",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("F") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Suave",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("D") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Tranquilo",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("E") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Vai Teia",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("F") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Suave",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("D") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Tranquilo",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("E") : null
-                ),
-                RaisedButton(
-                  child: Text(
-                      "Vai Teia",
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ), //Text
-                    onPressed: isConnected ? () => _sendMessage("F") : null
-                ),
-              ],
-            )//
-          ],
+              Text("Comandos prontos"),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text(
+                        "Abrir Mão",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      color: Colors.red,
+                      onPressed: isConnected ? () => _sendMessage("A") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Fechar Mão",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("B") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                      
+                        "Rock in Roll",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("C") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Paz e Amor",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Tranquilo",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "OK",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Contagem de 0 a 5",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Joia",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Apontar",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Aspas",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Aplausos (libras)",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Pedra",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Papel",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Tesoura",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                ],
+              )//
+            ],
+          )
         )
       ),
       VoiceHome(connection),

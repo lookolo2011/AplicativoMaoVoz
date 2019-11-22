@@ -64,6 +64,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: isDiscovering ? Text('Buscando dispositivos') : Text('Dispositivos encontrados'),
         actions: <Widget>[
           (
@@ -80,6 +81,7 @@ class _DiscoveryPage extends State<DiscoveryPage> {
           )
         ],
       ),
+      backgroundColor: Colors.blueGrey[200],
       body: ListView.builder(
         itemCount: results.length,
         itemBuilder: (BuildContext context, index) {

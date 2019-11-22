@@ -94,6 +94,7 @@ class _MainPage extends State<MainPage> {
             SwitchListTile(
               title: const Text('Ligar Bluetooth'),
               value: _bluetoothState.isEnabled,
+              activeColor: Colors.red,
               onChanged: (bool value) {
                 // Do the request and update with the true value then
                 future() async { // async lambda seems to not working
@@ -121,6 +122,7 @@ class _MainPage extends State<MainPage> {
               title: const Text('Inserir senha automaticamente'),
               subtitle: const Text('Pin 1234'),
               value: _autoAcceptPairingRequests,
+              activeColor: Colors.red,
               onChanged: (bool value) {
                 setState(() {
                   _autoAcceptPairingRequests = value;
