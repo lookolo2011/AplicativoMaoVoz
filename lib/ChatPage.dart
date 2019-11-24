@@ -200,10 +200,10 @@ class _VoiceHomeState extends State<VoiceHome> {
     else if(comandoVoz == "fechar mão") {
       return "B";
     }
-    else if(comandoVoz == "rock") {
+    else if(comandoVoz == "rock and roll") {
       return "C";
     }
-    else if(comandoVoz == "suave") {
+    else if(comandoVoz == "paz e amor") {
       return "D";
     }
     else if(comandoVoz == "tranquilo") {
@@ -211,6 +211,33 @@ class _VoiceHomeState extends State<VoiceHome> {
     }
     else if(comandoVoz == "homem-aranha") {
       return "F";
+    }
+    else if(comandoVoz == "ok") {
+      return "G";
+    }
+    else if(comandoVoz == "Contagem") {
+      return "H";
+    }
+    else if(comandoVoz == "joia") {
+      return "I";
+    }
+    else if(comandoVoz == "apontar") {
+      return "J";
+    }
+    else if(comandoVoz == "citação") {
+      return "K";
+    }
+    else if(comandoVoz == "aplausos") {
+      return "L";
+    }
+    else if(comandoVoz == "pedra") {
+      return "M";
+    }
+    else if(comandoVoz == "papel") {
+      return "N";
+    }
+    else if(comandoVoz == "tesoura") {
+      return "O";
     }
 
     //se não for nenhum comando
@@ -368,7 +395,7 @@ class _ChatPage extends State<ChatPage> {
                         "Dedo 2",
                         style: TextStyle(color: Colors.black, fontSize: 18),
                       ), //Text
-                      color: Colors.red,
+                      //color: Colors.red,
                       onPressed: isConnected ? () => _sendMessage("b") : null
                   ),
                   RaisedButton(
@@ -458,7 +485,7 @@ class _ChatPage extends State<ChatPage> {
                         "Abrir Mão",
                         style: TextStyle(color: Colors.black, fontSize: 30),
                       ), //Text
-                      color: Colors.red,
+                      color: Colors.transparent,
                       onPressed: isConnected ? () => _sendMessage("A") : null
                   ),
                   RaisedButton(
@@ -471,7 +498,7 @@ class _ChatPage extends State<ChatPage> {
                   RaisedButton(
                     child: Text(
                       
-                        "Rock in Roll",
+                        "Rock and Roll",
                         style: TextStyle(color: Colors.black, fontSize: 30),
                       ), //Text
                       onPressed: isConnected ? () => _sendMessage("C") : null
@@ -486,6 +513,13 @@ class _ChatPage extends State<ChatPage> {
                   RaisedButton(
                     child: Text(
                         "Tranquilo",
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ), //Text
+                      onPressed: isConnected ? () => _sendMessage("D") : null
+                  ),
+                  RaisedButton(
+                    child: Text(
+                        "Homem Aranha",
                         style: TextStyle(color: Colors.black, fontSize: 30),
                       ), //Text
                       onPressed: isConnected ? () => _sendMessage("D") : null
