@@ -51,10 +51,10 @@ class _VoiceHomeState extends State<VoiceHome> {
 //agora vai
   SpeechRecognition _speechRecognition;
   bool _isAvailable = false;
-  bool _isListening = true;
-  bool ligaVoz = true;
+  bool _isListening = false;
+  bool ligaVoz = false;
 
-  String resultText = "HALP";
+  String resultText = "";
 
   @override
     initState() {
@@ -66,7 +66,7 @@ class _VoiceHomeState extends State<VoiceHome> {
     }
 
 
-  void initSpeechRecognizer() {
+  void initSpeechRecognizer () async{
     _speechRecognition = SpeechRecognition();
 
     _speechRecognition.setAvailabilityHandler(
@@ -83,7 +83,6 @@ class _VoiceHomeState extends State<VoiceHome> {
 
     _speechRecognition.setRecognitionCompleteHandler(
       () => setState(() => _isListening = false),//
-      
     );
 
     _speechRecognition.activate().then(
@@ -101,7 +100,7 @@ class _VoiceHomeState extends State<VoiceHome> {
 
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -147,10 +146,12 @@ class _VoiceHomeState extends State<VoiceHome> {
                           FloatingActionButton(
                             child: Icon(Icons.mic),
                             onPressed: () async {
-                              _comando();
-                              if (_isAvailable && !_isListening) { _speechRecognition.listen(locale: "pt_BR").then((result) =>  (_enviarComando(resultText))).asStream();
+                              if (_isAvailable && !_isListening) {
+                                ligaVoz = true;
+                                _speechRecognition.listen(locale: "pt_BR").then((result) => _enviarComando(resultText));
                               }
-                              
+                              //_speechRecognition.setRecognitionCompleteHandler(_enviarComando(resultText));
+                              //_enviarComando(resultText);                                                                                
                             },
                           ),
                           FloatingActionButton(
@@ -158,6 +159,7 @@ class _VoiceHomeState extends State<VoiceHome> {
                             mini: true,
                             backgroundColor: Colors.deepPurple,
                             onPressed: () {
+                              ligaVoz = false;
                               if (_isListening)
                                 _speechRecognition.stop().then(
                                       (result) => setState(() => _isListening = result),
@@ -192,12 +194,6 @@ class _VoiceHomeState extends State<VoiceHome> {
   }
 
   //teste para tentar executar até terminar a voz
-  void _comando(){
-    if(_isListening == false) {
-      _enviarComando(resultText);
-    }
-    else ;
-  }
 
 // enviaaaa voz
 //conversor para comando Arduino
@@ -254,36 +250,44 @@ class _VoiceHomeState extends State<VoiceHome> {
     else if(comandoVoz == "testando") {
       return "ABC";
     }
+    else if(comandoVoz == "parar") {
+      return "stop";
+    }
 
     //se não for nenhum comando
     else return "";
   }
 
   //enviando para o arduino comando
-  void _enviarComando(String text) async {
+  dynamic _enviarComando(String text) async{
     text = _converteVoz(text);
     text = text.trim();
     textEditingController.clear();
 
     //aqui da pra ver oque vai ser enviado para o arduino no Degub Console
     //ATENÇAO--- ele vai converter, então precisa falar, abrirmão, fechar mão algo assim para ele enviar A, B, C etc.
-    print('halp aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :$text');
-    if (text.length > 0)  {
-      try {
-        widget.connection.output.add(utf8.encode(text + "\r\n"));
-        await widget.connection.output.allSent;
+    print("halp aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :$text");
 
-        setState(() {
-          messages.add(_Message(clientID, text));
-        });
+    if(ligaVoz == true) {
+      if(text.length > 0)  {
+        try {
+          widget.connection.output.add(utf8.encode(text + "\r\n"));
+          await widget.connection.output.allSent;
 
-        Future.delayed(Duration(milliseconds: 333)).then((_) {
-          listScrollController.animateTo(listScrollController.position.maxScrollExtent, duration: Duration(milliseconds: 333), curve: Curves.easeOut);
-        });
+          setState(() {
+            messages.add(_Message(clientID, text));
+          });
+
+          Future.delayed(Duration(milliseconds: 333)).then((_) {
+            listScrollController.animateTo(listScrollController.position.maxScrollExtent, duration: Duration(milliseconds: 333), curve: Curves.easeOut);
+          });
+          //_speechRecognition.listen(locale: "pt_BR").whenComplete(_enviarComando(resultText)).asStream();
+        }
+        catch (e) {
+          setState(() {});
+        }
       }
-      catch (e) {
-        setState(() {});
-      }
+      _speechRecognition.listen(locale: "pt_BR").then((result) => _enviarComando(resultText));
     }
   }
 }
