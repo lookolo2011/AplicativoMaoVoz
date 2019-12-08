@@ -248,6 +248,12 @@ class _VoiceHomeState extends State<VoiceHome> {
     else if(comandoVoz == "tesoura") {
       return "O";
     }
+    else if(comandoVoz == "teste") {
+      return "123";
+    }
+    else if(comandoVoz == "testando") {
+      return "ABC";
+    }
 
     //se não for nenhum comando
     else return "";
