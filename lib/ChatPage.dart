@@ -160,10 +160,8 @@ class _VoiceHomeState extends State<VoiceHome> {
                             backgroundColor: Colors.deepPurple,
                             onPressed: () {
                               ligaVoz = false;
-                              if (_isListening)
-                                _speechRecognition.stop().then(
-                                      (result) => setState(() => _isListening = result),
-                                    );
+                              //if (_isListening)
+                                //_speechRecognition.stop().then((result) => setState(() => _isListening = result));
                             },
                           ),
                         ],
