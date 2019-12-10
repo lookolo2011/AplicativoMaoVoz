@@ -242,15 +242,6 @@ class _VoiceHomeState extends State<VoiceHome> {
     else if(comandoVoz == "tesoura") {
       return "O";
     }
-    else if(comandoVoz == "teste") {
-      return "123";
-    }
-    else if(comandoVoz == "testando") {
-      return "ABC";
-    }
-    else if(comandoVoz == "parar") {
-      return "stop";
-    }
 
     //se não for nenhum comando
     else return "";
@@ -264,7 +255,7 @@ class _VoiceHomeState extends State<VoiceHome> {
 
     //aqui da pra ver oque vai ser enviado para o arduino no Degub Console
     //ATENÇAO--- ele vai converter, então precisa falar, abrirmão, fechar mão algo assim para ele enviar A, B, C etc.
-    print("halp aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :$text");
+    //print("halp aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa :$text");
 
     if(ligaVoz == true) {
       if(text.length > 0)  {
@@ -411,6 +402,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("a") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Dedo 2",
                         style: TextStyle(color: Colors.black, fontSize: 18),
@@ -419,6 +411,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("b") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Dedo 3",
                         style: TextStyle(color: Colors.black, fontSize: 18),
@@ -431,6 +424,7 @@ class _ChatPage extends State<ChatPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Dedo 4",
                         style: TextStyle(color: Colors.black, fontSize: 18),
@@ -438,6 +432,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("d") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Dedo 5",
                         style: TextStyle(color: Colors.black, fontSize: 18),
@@ -501,11 +496,11 @@ class _ChatPage extends State<ChatPage> {
 
                 children: <Widget>[
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Abrir Mão",
                         style: TextStyle(color: Colors.black, fontSize: 30),
                       ), //Text
-                      color: Colors.transparent,
                       onPressed: isConnected ? () => _sendMessage("A") : null
                   ),
                   RaisedButton(
@@ -516,6 +511,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("B") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                       
                         "Rock and Roll",
@@ -531,6 +527,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("D") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Tranquilo",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -545,6 +542,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("F") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "OK",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -559,6 +557,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("H") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Joia",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -573,6 +572,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("J") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Aspas",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -587,6 +587,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("L") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Pedra",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -601,6 +602,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("N") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Tesoura",
                         style: TextStyle(color: Colors.black, fontSize: 30),
