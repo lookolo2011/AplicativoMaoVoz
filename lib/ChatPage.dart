@@ -215,9 +215,6 @@ class _VoiceHomeState extends State<VoiceHome> {
     else if(comandoVoz == "homem-aranha") {
       return "F";
     }
-    else if(comandoVoz == "ok") {
-      return "G";
-    }
     else if(comandoVoz == "Contagem") {
       return "H";
     }
@@ -544,20 +541,12 @@ class _ChatPage extends State<ChatPage> {
                   RaisedButton(
                     color: Colors.redAccent,
                     child: Text(
-                        "OK",
-                        style: TextStyle(color: Colors.black, fontSize: 30),
-                      ), //Text
-                      onPressed: isConnected ? () => _sendMessage("G") : null
-                  ),
-                  RaisedButton(
-                    child: Text(
                         "Contagem de 0 a 5",
                         style: TextStyle(color: Colors.black, fontSize: 30),
                       ), //Text
                       onPressed: isConnected ? () => _sendMessage("H") : null
                   ),
                   RaisedButton(
-                    color: Colors.redAccent,
                     child: Text(
                         "Joia",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -565,6 +554,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("I") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Apontar",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -572,7 +562,6 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("J") : null
                   ),
                   RaisedButton(
-                    color: Colors.redAccent,
                     child: Text(
                         "Aspas",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -580,6 +569,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("K") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Aplausos (libras)",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -587,7 +577,6 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("L") : null
                   ),
                   RaisedButton(
-                    color: Colors.redAccent,
                     child: Text(
                         "Pedra",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -595,6 +584,7 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("M") : null
                   ),
                   RaisedButton(
+                    color: Colors.redAccent,
                     child: Text(
                         "Papel",
                         style: TextStyle(color: Colors.black, fontSize: 30),
@@ -602,7 +592,6 @@ class _ChatPage extends State<ChatPage> {
                       onPressed: isConnected ? () => _sendMessage("N") : null
                   ),
                   RaisedButton(
-                    color: Colors.redAccent,
                     child: Text(
                         "Tesoura",
                         style: TextStyle(color: Colors.black, fontSize: 30),
